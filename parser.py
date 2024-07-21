@@ -82,7 +82,7 @@ class OsuFileParser:
             first_note = True
             while cur_bpm_pointer < _timing_size and self.timing[cur_bpm_pointer]['Offset'] <= round(cur_time):
                 if self.timing[cur_bpm_pointer]['BPM'] != '-1':
-                    print(self.timing[cur_bpm_pointer]['BPM'])
+                    # print(self.timing[cur_bpm_pointer]['BPM'])
                     last_bpm = self.timing[cur_bpm_pointer]['BeatLength']
                     note_str = note_str + '\n(' + self.timing[cur_bpm_pointer]['BPM'] + ')'
                     time_step = last_bpm * 4 / _STEPS
