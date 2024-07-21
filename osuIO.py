@@ -2,7 +2,8 @@ import os
 import shutil
 import zipfile
 
-from config import TEMP_DIR
+from config import *
+from parser import *
 
 
 def unzip_to_temp(zip_path, temp_dir='./tmp'):
@@ -47,7 +48,6 @@ def list_and_select_osu_file(temp_dir):
 
 
 def process_osu_file(osu_path, output_dir):
-    from parser import OsuFileParser
     parser = OsuFileParser()
     parser.parse(osu_path)
     result = parser.convert_simai_header()
