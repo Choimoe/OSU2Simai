@@ -21,9 +21,12 @@ def create_named_folder(zip_path, base_dir='./'):
     return named_folder
 
 
-def rename_and_move_file(src_dir, dst_dir, file_name):
+def rename_and_move_file(src_dir, dst_dir, file_name, FILE_MODE=1):
     file_base, file_ext = os.path.splitext(file_name)
-    new_name = f"track{file_ext}"
+    if FILE_MODE == 1:
+        new_name = f"track{file_ext}"
+    else:
+        new_name = f"BG{file_ext}"
 
     src_file = os.path.join(src_dir, file_name)
     dst_file = os.path.join(dst_dir, new_name)
@@ -52,7 +55,8 @@ def process_osu_file(osu_path, output_dir):
     parser.parse(osu_path)
     result = parser.convert_simai_header()
     rename_and_move_file(TEMP_DIR, output_dir, parser.get_data()['General']['AudioFilename'].strip())
-
+    if parser.get_bg().strip() != '':
+        rename_and_move_file(TEMP_DIR, output_dir, parser.get_bg().strip(), 2)
     output_file = os.path.join(output_dir, 'maidata.txt')
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(result)

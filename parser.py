@@ -7,6 +7,7 @@ class OsuFileParser:
         self.timing = []
         self.objects = []
         self.keys = 4
+        self.bg = ''
 
     def parse(self, filepath):
         with open(filepath, 'r', encoding='utf-8') as file:
@@ -47,6 +48,11 @@ class OsuFileParser:
                 self.objects.append(hit_object)
             elif len(parts) == 8:
                 self.timing.append(parse_timing_point(line))
+            elif len(parts) == 5 and self.bg == '':
+                # print(parts)
+                if parts[2].endswith('.jpg"') or parts[2].endswith('.png"'):
+                    self.bg = parts[2][1:-1]
+
 
     def get_data(self):
         return self.data
@@ -56,6 +62,9 @@ class OsuFileParser:
 
     def get_objects(self):
         return self.objects
+
+    def get_bg(self):
+        return self.bg
 
     def convert_simai_header(self):
         header = "&title=" + self.data['Metadata']['TitleUnicode'] + '\n'
