@@ -3,9 +3,9 @@ import sys
 from osuIO import *
 
 if __name__ == "__main__":
-    # if len(sys.argv) != 2:
-    #     print("Usage: python osu2simai.py input.osz")
-    #     sys.exit(1)
+    if len(sys.argv) != 2:
+        print("Usage: python osu2simai.py input.osz")
+        sys.exit(1)
 
     zip_path = sys.argv[1]
     unzip_to_temp(zip_path, TEMP_DIR)

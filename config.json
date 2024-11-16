@@ -15,5 +15,8 @@
   "LEVEL": 15,
   "RANDOM": 4,
   "SAME": false,
-  "ONGEKI": true
+  "ONGEKI": true,
+  "ONGEKI_KEYS": [
+    -16, -10, -4, 4, 10, 16
+  ]
 }

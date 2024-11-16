@@ -126,3 +126,62 @@ class OsuFileParser:
             reduce_result = reduce_result + compress_dashes(line) + '\n'
 
         return header + reduce_result
+
+    def convert_ongeki_header(self):
+        header = "Header.Version\t:\t1.0.0\n"
+        header += "Header.Creator\t:\t{}\n".format(AUTHOR)
+        header += "Header.FirstBpm\t:\t{}\n".format(self.timing[0]['BPM'])
+        header += "Header.CommonBpm\t:\t{}\n".format(self.timing[0]['BPM'])
+        header += "Header.MaximumBpm\t:\t{}\n".format(self.timing[0]['BPM'])
+        header += "Header.MinimumBpm\t:\t{}\n".format(self.timing[0]['BPM'])
+        header += "Header.Meter\t:\t4 / 4\n"
+        header += "Header.TRESOLUTION\t:\t1920\n"
+        header += "Header.XRESOLUTION\t:\t4096\n"
+        header += "Header.ClickDefinition\t:\t1920\n"
+        header += "Header.Tutorial\t:\tFalse\n"
+        header += "Header.BeamDamage\t:\t2\n"
+        header += "Header.HardBulletDamage\t:\t2\n"
+        header += "Header.DangerBulletDamage\t:\t4\n"
+        header += "Header.BulletDamage\t:\t1\n"
+        header += "Header.ProgJudgeBpm\t:\t{}\n".format(240)
+
+        header += "\n\n\n\n\n"
+
+        output_tap = []
+        output_hold = []
+
+        beat_len = self.timing[0]['BeatLength'] * 4
+        start = self.timing[0]['Offset']
+        tot_len = 0
+
+        for note_id, obj in enumerate(self.objects):
+            x_value = ONGEKI_KEYS[obj['x']]
+            measure, position = time_to_measure(obj['time'] - start, beat_len)
+            tot_len = max(tot_len, measure)
+
+            if obj['object_type'] <= 5:
+                line = f"Tap\t:\t{obj['x']}\t:\tX[{x_value},0], T[{measure},{position}], C[False]"
+                output_tap.append(line)
+
+            elif obj['object_type'] == 128:
+                end_measure, end_position = time_to_measure(obj['end'] - start, beat_len)
+                line = (f"Hold\t:\t{obj['x']}, False, False\t:\t"
+                        f"(X[{x_value},0], T[{measure},{position}])\t->\t"
+                        f"(X[{x_value},0], T[{end_measure},{end_position}])")
+                output_hold.append(line)
+                tot_len = max(tot_len, end_measure)
+
+        header += "Lane: 2:    (Type[LRS], X[{}, 0], T[0, 0])    ->    (Type[LRE], X[{}, 0], T[{}, 0])\n".format(
+            ONGEKI_KEYS[2], ONGEKI_KEYS[2], tot_len)
+        header += "Lane: 5:    (Type[LRS], X[{}, 0], T[0, 0])    ->    (Type[LRE], X[{}, 0], T[{}, 0])\n\n".format(
+            ONGEKI_KEYS[5], ONGEKI_KEYS[5], tot_len)
+        header += "Lane: 0:    (Type[LLS], X[{}, 0], T[0, 0])    ->    (Type[LLE], X[{}, 0], T[{}, 0])\n".format(
+            ONGEKI_KEYS[0], ONGEKI_KEYS[0], tot_len)
+        header += "Lane: 3:    (Type[LLS], X[{}, 0], T[0, 0])    ->    (Type[LLE], X[{}, 0], T[{}, 0])\n\n".format(
+            ONGEKI_KEYS[3], ONGEKI_KEYS[3], tot_len)
+        header += "Lane: 1:    (Type[LCS], X[{}, 0], T[0, 0])    ->    (Type[LCE], X[{}, 0], T[{}, 0])\n".format(
+            ONGEKI_KEYS[1], ONGEKI_KEYS[1], tot_len)
+        header += "Lane: 4:    (Type[LCS], X[{}, 0], T[0, 0])    ->    (Type[LCE], X[{}, 0], T[{}, 0])\n\n".format(
+            ONGEKI_KEYS[4], ONGEKI_KEYS[4], tot_len)
+
+        return header + "\n\n\n\n\n" + '\n'.join(output_tap) + "\n\n\n\n\n" + '\n'.join(output_hold)

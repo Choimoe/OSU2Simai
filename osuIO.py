@@ -60,3 +60,12 @@ def process_osu_file(osu_path, output_dir):
     output_file = os.path.join(output_dir, 'maidata.txt')
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(result)
+
+
+def process_osu_file_test(osu_path, output_dir, name):
+    parser = OsuFileParser()
+    parser.parse(osu_path)
+    result = parser.convert_ongeki_header()
+    output_file = os.path.join(output_dir, name)
+    with open(output_file, 'w', encoding='utf-8') as file:
+        file.write(result)

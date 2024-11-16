@@ -94,3 +94,10 @@ def note_to_str(param, beatLength, key_num, prev):
         note_length = param['end'] - param['time']
         beat_len, beat_fac = closest_fraction(note_length, beatLength)
         return str(note_pos) + 'h[{}:{}]'.format(beat_fac, beat_len)
+
+
+def time_to_measure(time, BeatLength):
+    beats = time / BeatLength
+    measure = int(beats)
+    position = int((beats - measure) * 1920)
+    return measure + 1, position
