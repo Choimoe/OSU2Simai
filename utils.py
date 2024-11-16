@@ -1,4 +1,5 @@
 from config import *
+import numpy as np
 
 
 def convert_value(value):
@@ -74,10 +75,22 @@ def parse_common_parts(para):
     return x, y, time, note_type, para
 
 
-def note_to_str(param, beatLength, key_num):
+def note_to_str(param, beatLength, key_num, prev):
+    note_pos = KEYS[key_num][param['x']]
+    if RANDOM:
+        if RANDOM == 2:
+            if note_pos == 4:
+                note_pos = np.random.randint(low=1, high=5)
+            else:
+                note_pos = np.random.randint(low=5, high=9)
+        else:
+            note_pos = np.random.randint(low=1, high=9)
+            while note_pos in prev:
+                note_pos = np.random.randint(low=1, high=9)
+
     if param['object_type'] != 128:
-        return str(KEYS[key_num][param['x']])
+        return str(note_pos)
     else:
         note_length = param['end'] - param['time']
         beat_len, beat_fac = closest_fraction(note_length, beatLength)
-        return str(KEYS[key_num][param['x']]) + 'h[{}:{}]'.format(beat_fac, beat_len)
+        return str(note_pos) + 'h[{}:{}]'.format(beat_fac, beat_len)

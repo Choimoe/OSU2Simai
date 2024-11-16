@@ -25,11 +25,12 @@ class OsuFileParser:
     def parse_line(self, line, section):
         import re
         match = re.match(r'(\w+):(.*)', line)
-        match_time = re.match(r'(\w+)(,(.*))+', line)
+        match_time = re.match(r'([\w.]+)(,(.*))+', line)
         if match:
             key, value = match.groups()
             if section:
-                self.data[section][key] = convert_value(value)
+                if not key.startswith("AI"):
+                    self.data[section][key] = convert_value(value)
             if section == 'Difficulty' and key == 'CircleSize':
                 self.keys = convert_value(value)
         elif match_time:
@@ -52,7 +53,6 @@ class OsuFileParser:
                 # print(parts)
                 if parts[2].endswith('.jpg"') or parts[2].endswith('.png"'):
                     self.bg = parts[2][1:-1]
-
 
     def get_data(self):
         return self.data
@@ -99,12 +99,20 @@ class OsuFileParser:
             if sub_count == 0:
                 note_str = note_str + '\n{96}'
                 sub_count = _STEPS
+            lst_notes = []
+            same_notes = False
             while cur_note < _size and self.objects[cur_note]['time'] <= round(cur_time):
+                if (not SAME) and same_notes:
+                    cur_note += 1
+                    continue
                 if first_note:
                     first_note = False
                 else:
                     note_str = note_str + '/'
-                note_str = note_str + note_to_str(self.objects[cur_note], self.timing[0]['BeatLength'] * 4, self.keys)
+                    same_notes = True
+                new_note = note_to_str(self.objects[cur_note], self.timing[0]['BeatLength'] * 4, self.keys, lst_notes)
+                lst_notes.append(new_note)
+                note_str = note_str + new_note
                 cur_note += 1
             if note_str is not None:
                 simai = simai + note_str + ','
