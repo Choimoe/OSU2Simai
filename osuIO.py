@@ -50,22 +50,17 @@ def list_and_select_osu_file(temp_dir):
     return os.path.join(temp_dir, osu_files[choice])
 
 
-def process_osu_file(osu_path, output_dir):
+def process_osu_file(osu_path, output_dir, name='maidata.txt'):
     parser = OsuFileParser()
     parser.parse(osu_path)
-    result = parser.convert_simai_header()
+    if ONGEKI:
+        result = parser.convert_ongeki_header()
+        name = 'out.nyageki'
+    else:
+        result = parser.convert_simai_header()
     rename_and_move_file(TEMP_DIR, output_dir, parser.get_data()['General']['AudioFilename'].strip())
     if parser.get_bg().strip() != '':
         rename_and_move_file(TEMP_DIR, output_dir, parser.get_bg().strip(), 2)
-    output_file = os.path.join(output_dir, 'maidata.txt')
-    with open(output_file, 'w', encoding='utf-8') as file:
-        file.write(result)
-
-
-def process_osu_file_test(osu_path, output_dir, name):
-    parser = OsuFileParser()
-    parser.parse(osu_path)
-    result = parser.convert_ongeki_header()
     output_file = os.path.join(output_dir, name)
     with open(output_file, 'w', encoding='utf-8') as file:
         file.write(result)
