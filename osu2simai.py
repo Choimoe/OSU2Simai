@@ -3,8 +3,13 @@ import sys
 from osuIO import *
 
 if __name__ == "__main__":
+    init_config_file()
     if len(sys.argv) != 2:
         print("Usage: python osu2simai.py input.osz")
+        sys.exit(1)
+
+    if AUTHOR is None:
+        print("cannot open config.json!")
         sys.exit(1)
 
     if ONGEKI:

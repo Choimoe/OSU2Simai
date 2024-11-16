@@ -13,9 +13,9 @@
   "TEMP_DIR": "./tmp",
   "AUTHOR": "OSU2Simai",
   "LEVEL": 15,
-  "RANDOM": 4,
+  "RANDOM": 0,
   "SAME": false,
-  "ONGEKI": true,
+  "ONGEKI": false,
   "ONGEKI_KEYS": [
     -16, -10, -4, 4, 10, 16
   ]
