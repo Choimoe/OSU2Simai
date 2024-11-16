@@ -28,7 +28,7 @@ jobs:
       run: pyinstaller --onefile --additional-hooks-dir=. osu2simai.py
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: OSU2Simai
         path: dist/osu2simai.exe
