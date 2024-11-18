@@ -12,6 +12,7 @@ ONGEKI_KEYS = None
 
 
 def init_config_file(file_path='config.json'):
+    global KEYS, TEMP_DIR, AUTHOR, LEVEL, RANDOM, SAME, ONGEKI, ONGEKI_KEYS
     default_content = {
         "KEYS": [
             [],
@@ -53,3 +54,6 @@ def init_config_file(file_path='config.json'):
     SAME = config["SAME"]
     ONGEKI = config["ONGEKI"]
     ONGEKI_KEYS = config["ONGEKI_KEYS"]
+
+
+init_config_file()

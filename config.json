@@ -47,7 +47,7 @@
   "LEVEL": 15,
   "RANDOM": 0,
   "SAME": false,
-  "ONGEKI": false,
+  "ONGEKI": true,
   "ONGEKI_KEYS": [
     -16,
     -10,

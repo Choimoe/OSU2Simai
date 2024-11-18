@@ -153,9 +153,12 @@ class OsuFileParser:
         beat_len = self.timing[0]['BeatLength'] * 4
         start = self.timing[0]['Offset']
         tot_len = 0
+        max_obj = 0
 
         for note_id, obj in enumerate(self.objects):
             x_value = ONGEKI_KEYS[obj['x']]
+            max_obj = max(max_obj, obj['x'])
+            print(obj['x'], max_obj)
             measure, position = time_to_measure(obj['time'] - start, beat_len)
             tot_len = max(tot_len, measure)
 
