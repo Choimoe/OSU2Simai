@@ -54,7 +54,3 @@ def init_config_file(file_path='config.json'):
     SAME = config["SAME"]
     ONGEKI = config["ONGEKI"]
     ONGEKI_KEYS = config["ONGEKI_KEYS"]
-
-
-# 在模块加载时调用初始化函数
-init_config_file()
