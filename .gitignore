@@ -1,0 +1,14 @@
+/*.osz
+/*.osu
+/venv/
+/.idea/
+/.idea/*
+/*/*.txt
+/*/*.json
+/*/*.mp3
+/*/*/autosave.*
+/*/*/*.json
+/__pycache__/
+/__pycache__/*
+/ongeki/
+config.json

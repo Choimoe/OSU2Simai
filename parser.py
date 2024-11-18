@@ -155,7 +155,7 @@ class OsuFileParser:
         tot_len = 0
 
         for note_id, obj in enumerate(self.objects):
-            x_value = ONGEKI_KEYS[obj['x']-1]
+            x_value = ONGEKI_KEYS[obj['x']]
             measure, position = time_to_measure(obj['time'] - start, beat_len)
             tot_len = max(tot_len, measure)
 
